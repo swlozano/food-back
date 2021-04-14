@@ -1,0 +1,9 @@
+
+apiKey=a88e1450cb534c0fb8e6cbed746e5564
+
+Search
+https://api.spoonacular.com/recipes/complexSearch?apiKey=a88e1450cb534c0fb8e6cbed746e5564&query=pasta&maxFat=25&number=2
+
+Recipe Information
+https://api.spoonacular.com/recipes/{id}/information
+https://api.spoonacular.com/recipes/716429/information?apiKey=a88e1450cb534c0fb8e6cbed746e5564&includeNutrition=false
