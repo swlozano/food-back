@@ -10,7 +10,7 @@ router.get('/', function(req, res){
 //Get by Id
 router.get('/:id', function(req, res){
    db.getRecipeById(req.params.id).then(data=>res.json(data))
-   //res.send('GET list Recipes. '+req.params.id);
+
 });
 
 

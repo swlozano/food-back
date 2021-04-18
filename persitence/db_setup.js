@@ -7,8 +7,17 @@ const dietModel = require('./model/DietType')
 const Recipe = recipeModel(sequelize)
 const Diet = dietModel(sequelize)
 
-Recipe.belongsToMany(Diet, { through: 'RecipeXDiet' });
-Diet.belongsToMany(Recipe, { through: 'RecipeXDiet' });
+const RecipeXDiet = sequelize.define('RecipeXDiet', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false
+  }
+});
+
+Recipe.belongsToMany(Diet, { through: RecipeXDiet });
+Diet.belongsToMany(Recipe, { through: RecipeXDiet });
 
 async function startDb() {
   try {
@@ -16,8 +25,6 @@ async function startDb() {
     console.log('Connection has been established successfully : ).');
     await sequelize.sync({ force: false });
     console.log("All models were synchronized successfully.");
-    /*const foo = await rm.create({ name: 'foo' });
-    console.log("Model created",foo) */
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
@@ -32,14 +39,13 @@ async function startDb() {
 async function createRecipe(recipe) {
   try {
     const r = await Recipe.create(recipe)
-    console.log("Recipe Was Create!!!!", r.toJSON())
+    let arrRecipeXDiet = []
+    recipe.dietTypes.forEach(i=>arrRecipeXDiet.push({ RecipeId: r.id, DietTypeId: i.id }))
+    const result = await RecipeXDiet.bulkCreate(arrRecipeXDiet);
+    return result
   } catch (error) {
     console.log("Error on create Recipe", error)
   }
-}
-
-async function createRecipeXDiet(idRecipe, types) {
-
 }
 
 async function getDiets() {
@@ -58,7 +64,7 @@ async function getRecipeByName(name) {
     })
     return result
   } catch (error) {
-    console.log("EROOR", error)
+    console.log("error", error)
   }
 }
 
@@ -74,7 +80,6 @@ async function getRecipeById(id) {
     console.log("EROOR", error)
   }
 }
-
 
 exports.startDb = startDb;
 exports.createRecipe = createRecipe;

@@ -10,12 +10,13 @@ router.get('/', function(req, res){
   summary
   score
   healthyLevel
-  steps */
+  steps 
+  dietTypes
+  */
 
 router.post('/', function(req, res){
-   console.log("Body",req.body)
-   db.createRecipe(req.body)
-   res.send('POST Recipe');
+   //console.log("body---------->",req.body)
+   db.createRecipe(req.body).then(data=>res.json(data))
 });
 
 module.exports = router;
